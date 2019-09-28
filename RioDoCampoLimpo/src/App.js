@@ -7,23 +7,19 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import { View, Text } from 'react-native';
+/* firebase.initializeApp({
+  apiKey: 'AIzaSyD1fM0G-HCgwzpYjHuMhMUn1f13mNz1nAU',
+  authDomain: 'riodocampolimpo-app.firebaseapp.com',
+}); */
+
 
 const App = () => {
   return (
-    <View>
-      <Text>Hello carai</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Hello, world!</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;
