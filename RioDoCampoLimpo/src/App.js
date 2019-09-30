@@ -1,25 +1,12 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
-import React from 'react';
-import { View, Text } from 'react-native';
-/* firebase.initializeApp({
-  apiKey: 'AIzaSyD1fM0G-HCgwzpYjHuMhMUn1f13mNz1nAU',
-  authDomain: 'riodocampolimpo-app.firebaseapp.com',
-}); */
+import Mapa from './pages/mapa';
 
-
-const App = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Hello, world!</Text>
-    </View>
-  );
-};
-
-export default App;
+export default class App extends Component {
+  render() {
+    return (
+      <Mapa></Mapa>
+    );
+  }
+}
