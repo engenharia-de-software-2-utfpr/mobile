@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:110953244440:android:e305f2eab460bbe9a4206d",
+        "mobilesdk_app_id": "1:110953244440:android:c6b5a9db431a141fa4206d",
         "android_client_info": {
           "package_name": "com.riodocampolimpo"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "110953244440-fer6jkor57ecjcid02ska3k804a9jtod.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.riodocampolimpo",
+            "certificate_hash": "53d903ea142b1857b6ab968c671ec412fa16208a"
+          }
+        },
         {
           "client_id": "110953244440-n2eb2vcjq51o10flul7u2ddmmn4dgv6h.apps.googleusercontent.com",
           "client_type": 3
