@@ -6,7 +6,7 @@ import Mapa from './pages/mapa';
 export default class App extends Component {
 
   render() {
-    return  (
+    return (
       <Mapa></Mapa>
     );
   }
