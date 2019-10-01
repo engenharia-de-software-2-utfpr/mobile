@@ -1,44 +1,69 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+
+import { requestApprovedOcurrences } from '../api/occurence';
+
+import icons from '../../assets/icons';
 
 export default class Mapa extends Component {
   state = {
-    position: null,
-    loaded: false,
+    position: {
+      coords: {
+        // centro campo mourão
+        latitude: -24.044106,
+        longitude: -52.378633,
+      },
+    },
+    approvedOccurrences: [],
   };
 
-  findCoordinates = () => {
+  getCurrentPosition = () => {
     Geolocation.getCurrentPosition(position => {
       this.setState({ position, loaded: true });
     });
   };
 
-  componentDidMount() {
-    this.findCoordinates();
-  }
+  getNearApprovedOcurrences = async () => {
+    const result = await requestApprovedOcurrences(this.state.position.coords);
+
+    this.setState({
+      approvedOccurrences: result.data,
+    });
+  };
+
+  componentDidMount = () => {
+    this.getCurrentPosition();
+    this.getNearApprovedOcurrences();
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>
-          {this.state.loaded ? JSON.stringify(this.state.position.coords) : 'espere'}
-        </Text>
+        <Text>{JSON.stringify(this.state.position.coords)}</Text>
         <MapView
+          ref={'mapa'}
           style={styles.map}
-          loadingEnabled={true}
-          region={
-            this.state.loaded == true
-              ? {
-                  latitude: this.state.position.coords.latitude,
-                  longitude: this.state.position.coords.longitude,
-                  latitudeDelta: 0.005,
-                  longitudeDelta: 0.0121,
-                }
-              : {}
-          }></MapView>
+          region={{
+            latitude: this.state.position.coords.latitude,
+            longitude: this.state.position.coords.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.0121,
+          }}>
+          {this.state.approvedOccurrences.map(occ => (
+            <Marker
+              key={`${occ.id}`}
+              title={occ.category_id}
+              coordinate={{
+                latitude: occ.latitude,
+                longitude: occ.longitude,
+              }}>
+              <Image style={styles.icon} source={icons[occ.category_id]} />
+            </Marker>
+          ))}
+        </MapView>
       </View>
     );
   }
@@ -50,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
-
+  icon: { width: 25, height: 25 },
   map: {
     position: 'absolute',
     top: 0,
