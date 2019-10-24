@@ -25,7 +25,7 @@ export default function Occurrence({navigation}) {
         <Button
           title="Tem algo errado aqui!"
           onPress={() => {
-            navigation.navigate('New');
+            navigation.navigate('Media');
           }}
           buttonStyle={{
             backgroundColor: 'black',
