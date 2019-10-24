@@ -10,10 +10,12 @@
     "react-devtool": "react-devtools"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.6.2",
     "hermes-engine": "^0.2.1",
     "react": "16.11.0",
     "react-native": "0.61.2",
     "react-native-animated-nav-tab-bar": "^1.0.4",
+    "react-native-camera": "^3.8.0",
     "react-native-elements": "^1.2.6",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-linear-gradient": "^2.5.6",
