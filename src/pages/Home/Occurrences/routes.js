@@ -1,9 +1,10 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-
+import {Text} from 'react-native';
 import {TabBarIcon} from '../../../components/TabBarIcon';
 import Home from './index';
+import {Advance} from './styles' ;
 
 import Details from './New/Details';
 import Photo from './New/Media/Photo';
@@ -41,8 +42,21 @@ const Media = createBottomTabNavigator({
 });
 
 const Occurrences = createStackNavigator(
-  {Home, Media, Details},
-  {headerMode: 'none'},
+  {
+    Home: {screen: Home, navigationOptions: {header: null}},
+    Media: {
+      screen: Media,
+      navigationOptions: {
+        headerRight: () => (
+          <Advance>
+            <Text>Avançar</Text>
+          </Advance>
+        ),
+      },
+    },
+    Details,
+  },
+  // {headerMode: 'none'},
 );
 
 Occurrences.navigationOptions = ({navigation}) => ({

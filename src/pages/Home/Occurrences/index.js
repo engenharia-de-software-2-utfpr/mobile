@@ -1,21 +1,24 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Button} from 'react-native-elements';
 import MapView from 'react-native-maps';
-import {Container} from './styles';
+import {Text, View} from 'react-native';
+import {MapContainer, ButtonContainer, Container} from './styles';
+import {Button} from 'react-native-elements';
 
 export default function Occurrence({navigation}) {
   return (
     <Container>
-      <MapView
-        initialRegion={{
-          latitude: -24.046329,
-          longitude: -52.37802,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        style={{flex: 1}}
-      />
+      <MapContainer>
+        <MapView
+          initialRegion={{
+            latitude: -24.046329,
+            longitude: -52.37802,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          style={{flex: 1}}
+        />
+      </MapContainer>
+
       <View
         style={{
           position: 'absolute', //use absolute position to show button on top of the map
@@ -25,6 +28,8 @@ export default function Occurrence({navigation}) {
         <Button
           title="Tem algo errado aqui!"
           onPress={() => {
+            console.log('press');
+
             navigation.navigate('Media');
           }}
           buttonStyle={{

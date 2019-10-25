@@ -5,9 +5,5 @@ import MediaHeader from '../../../../../../components/MediaHeader';
 import {Container} from './styles';
 
 export default function Video() {
-  return (
-    <Container>
-      <MediaHeader />
-    </Container>
-  );
+  return <Container>{/* <MediaHeader /> */}</Container>;
 }

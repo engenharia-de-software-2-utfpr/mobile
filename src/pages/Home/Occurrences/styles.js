@@ -9,7 +9,15 @@ export const MapContainer = styled.View`
 `;
 
 export const ButtonContainer = styled.View`
-  margin: 0% 10%;
-  justify-content: flex-start;
+  /* flex: 1; */
+  /* justify-content: flex-center; */
   /* align-items: center; */
+`;
+
+export const Button = styled.TouchableOpacity`
+  background-color: black;
+`;
+
+export const Advance = styled.TouchableOpacity`
+  margin-right: 15px;
 `;
