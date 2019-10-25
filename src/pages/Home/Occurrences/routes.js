@@ -1,15 +1,15 @@
 import React from 'react';
+import {Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {Text} from 'react-native';
+import {fromRight} from 'react-navigation-transitions';
 import {TabBarIcon} from '../../../components/TabBarIcon';
 import Home from './index';
-import {Advance} from './styles' ;
-
 import Details from './New/Details';
+import Audio from './New/Media/Audio';
 import Photo from './New/Media/Photo';
 import Video from './New/Media/Video';
-import Audio from './New/Media/Audio';
+import {Advance} from './styles';
 
 const Media = createBottomTabNavigator({
   Photo: {
@@ -46,17 +46,25 @@ const Occurrences = createStackNavigator(
     Home: {screen: Home, navigationOptions: {header: null}},
     Media: {
       screen: Media,
-      navigationOptions: {
+      navigationOptions: ({navigation}) => ({
         headerRight: () => (
-          <Advance>
+          <Advance
+            onPress={() => {
+              navigation.navigate('Details');
+            }}>
             <Text>Avançar</Text>
           </Advance>
         ),
+      }),
+    },
+    Details: {
+      screen: Details,
+      navigationOptions: {
+        title: 'Detalhes',
       },
     },
-    Details,
   },
-  // {headerMode: 'none'},
+  {transitionConfig: () => fromRight()},
 );
 
 Occurrences.navigationOptions = ({navigation}) => ({

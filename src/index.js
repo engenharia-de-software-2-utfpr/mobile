@@ -1,5 +1,6 @@
 import React from 'react';
 // import { Container } from './styles';
+
 import AppContainer from './routes';
 
 if (__DEV__) {
