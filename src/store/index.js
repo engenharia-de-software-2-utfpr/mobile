@@ -1,30 +1,54 @@
-import {createStore} from 'redux';
-
+import {createStore, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
+import Reactotron from '../config/ReactotronConfig';
 const INITIAL_STATE = {
   occurrence: {
-    photos: [
-      'file:///storage/emulated/0/RioDoCampoLimpo/a4d853e3-af2b-4ec5-9cd5-f3b73d750e03.jpg',
-    ],
+    photos: [],
   },
+  error: null,
 };
 
 function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case 'NEW_OCCURRENCE':
-      return {...state};
-    case 'ADD_PHOTO':
+    case 'ADD_PHOTO_SUCCESS':
       return {
         ...state,
         occurrence: {
           ...state.occurrence,
-          photos: [...state.occurrence.photos, 'a'],
+          photos: [...state.occurrence.photos, action.payload.photo],
         },
       };
+    case 'ADD_PHOTO_FAILURE':
+      return {...state, error: action.payload.error};
+
+    case 'REMOVE_PHOTO':
+      const photos = state.occurrence.photos.filter(
+        photo => photo != action.payload.photo,
+      );
+
+      return {
+        ...state,
+        occurrence: {
+          ...state.occurrence,
+          photos,
+        },
+        error: null,
+      };
+
     default:
       return state;
   }
 }
 
-const store = createStore(reducer);
+const middlewares = [];
+
+if (__DEV__) {
+  const reactotronMiddleware = Reactotron.createEnhancer();
+  middlewares.push(reactotronMiddleware);
+}
+
+middlewares.push(applyMiddleware(thunk));
+
+const store = createStore(reducer, compose(...middlewares));
 
 export default store;

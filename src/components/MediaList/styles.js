@@ -8,7 +8,7 @@ export const Container = styled.View`
   /* background-color: black; */
 `;
 
-// export const MediaTileContainer = styled.View``
+export const MediaTileContainer = styled.TouchableOpacity``;
 
 export const MediaTile = styled(Image).attrs({
   width: 50,

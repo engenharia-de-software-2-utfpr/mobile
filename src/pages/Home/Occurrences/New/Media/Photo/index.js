@@ -1,32 +1,40 @@
-import React from 'react';
-import {Orientation} from 'react-native-camera';
+import React, {useEffect, useState} from 'react';
+import Toast from 'react-native-root-toast';
+import {useDispatch, useSelector} from 'react-redux';
 import Camera from '../../../../../../components/Camera';
 import MediaList from '../../../../../../components/MediaList';
-import {useSelector, useDispatch} from 'react-redux';
-import {useState} from 'react';
-import {v4} from 'uuid';
-
-import RNFS from 'react-native-fs';
-
-import {
-  Container,
-  MediaListContainer,
-  ActionButtonContainer,
-  ActionButton,
-  ActionButtonInner,
-  CameraIcon,
-  CameraContainer,
-  MediaContainer,
-} from './styles';
+import {addPhoto} from '../../../../../../store/actions/photo';
 import {requestStoragePermission} from '../../../../../../utils/permissions';
-
-const mediaPath = RNFS.ExternalStorageDirectoryPath + '/RioDoCampoLimpo';
+import {
+  ActionButton,
+  ActionButtonContainer,
+  ActionButtonInner,
+  CameraContainer,
+  CameraIcon,
+  Container,
+  MediaContainer,
+  MediaListContainer,
+} from './styles';
 
 export default function Photo({navigation}) {
   const photos = useSelector(state => state.occurrence.photos);
+  const error = useSelector(state => state.error);
+
   const dispatch = useDispatch();
 
   const [camera, setCamera] = useState(null);
+
+  useEffect(() => {
+    if (error) {
+      Toast.show(error, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
+    }
+  }, [error]);
 
   async function handleClick() {
     await requestStoragePermission();
@@ -38,11 +46,17 @@ export default function Photo({navigation}) {
       pauseAfterCapture: false,
     });
 
-    const dest = `${mediaPath}/${v4()}.jpg`;
+    dispatch(addPhoto(uri));
 
-    console.log({dest});
-
-    await RNFS.copyFile(uri, dest);
+    if (error) {
+      Toast.show(error, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
+    }
   }
 
   return (
