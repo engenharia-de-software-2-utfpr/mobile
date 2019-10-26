@@ -1,17 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {
-  ActionButton,
-  ActionButtonContainer,
-  ActionButtonInner,
-  Camera,
-  CameraIcon,
-  Container,
-  MediaListContainer,
-} from './styles';
+import {Camera, Container} from './styles';
 
-export default function MediaHolder({navigation}) {
+export default function MediaHolder({navigation, setCamera}) {
   const [focus, setFocus] = useState(true);
 
   useEffect(() => {
@@ -28,8 +20,8 @@ export default function MediaHolder({navigation}) {
     <Container>
       {focus ? (
         <Camera
-          ref={camera => {
-            this.camera = camera;
+          ref={cam => {
+            setCamera(cam);
           }}
           type={RNCamera.Constants.Type.back}
           autoFocus={RNCamera.Constants.AutoFocus.on}
@@ -44,15 +36,6 @@ export default function MediaHolder({navigation}) {
       ) : (
         <View style={{flex: 1}} />
       )}
-
-      <MediaListContainer />
-      <ActionButtonContainer>
-        <ActionButton>
-          <ActionButtonInner>
-            <CameraIcon />
-          </ActionButtonInner>
-        </ActionButton>
-      </ActionButtonContainer>
     </Container>
   );
 }
