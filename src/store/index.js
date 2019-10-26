@@ -23,7 +23,7 @@ function reducer(state = INITIAL_STATE, action) {
 
     case 'REMOVE_PHOTO':
       const photos = state.occurrence.photos.filter(
-        photo => photo != action.payload.photo,
+        photo => photo !== action.payload.photo,
       );
 
       return {
