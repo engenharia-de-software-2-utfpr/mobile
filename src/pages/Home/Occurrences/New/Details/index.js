@@ -2,6 +2,7 @@ import NetInfo from '@react-native-community/netinfo';
 import React, {useEffect, useState} from 'react';
 import {Text} from 'react-native';
 import {Code} from 'react-content-loader/native';
+import Toast from 'react-native-root-toast';
 import AsyncStorage from '@react-native-community/async-storage';
 import Slider from '@react-native-community/slider';
 import {Avatar} from 'react-native-paper';
@@ -22,12 +23,12 @@ import {
 } from './styles';
 
 export default function Details() {
-  const [details, setDetails] = useState('');
+  const [description, setDescription] = useState('');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const [criticityLevel, setCriticityLevel] = useState(3);;
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [criticityLevel, setCriticityLevel] = useState(3);
 
   useEffect(() => {
     async function loadCategories() {
@@ -64,12 +65,28 @@ export default function Details() {
     loadCategories();
   }, []);
 
-  async function createOccurrence() {}
+  async function createOccurrence() {
+    if (selectedCategory === null) {
+      Toast.show('Escolha uma categoria', {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
+    }
+
+    const cachedOccurrences = JSON.parse(
+      await AsyncStorage.getItem('@occurrences'),
+    );
+
+    console.tron.log(cachedOccurrences);
+  }
 
   return (
     <Container>
       <DetailsTitle>Aqui você pode descrever a ocorrência</DetailsTitle>
-      <DetailsInput value={details} onChangeText={setDetails} />
+      <DetailsInput value={description} onChangeText={setDescription} />
       <CategoryTitle>
         Em qual categoria sua ocorrência se encaixa?
       </CategoryTitle>
@@ -82,10 +99,10 @@ export default function Details() {
         ) : (
           categories.map(category => (
             <CategoryChip
-              selected={category.id === selected}
+              selected={category.id === selectedCategory}
               key={category.id}
               onPress={() => {
-                setSelected(category.id);
+                setSelectedCategory(category.id);
               }}
               selectedColor="transparent"
               avatar={
