@@ -1,6 +1,5 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import RNFS from 'react-native-fs';
 
 import AppContainer from './routes';
 
@@ -11,16 +10,6 @@ if (__DEV__) {
     console.log('Reactotron Configured'),
   );
 }
-
-const mediaPath = RNFS.ExternalStorageDirectoryPath + '/RioDoCampoLimpo';
-
-console.log({mediaPath});
-
-RNFS.exists(mediaPath).then(exists => {
-  if (!exists) {
-    RNFS.mkdir(mediaPath, {});
-  }
-});
 
 export default function App() {
   return (

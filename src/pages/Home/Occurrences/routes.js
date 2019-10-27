@@ -3,6 +3,7 @@ import {Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {fromRight} from 'react-navigation-transitions';
+import HeaderBack from '../../../components/HeaderBack';
 import {TabBarIcon} from '../../../components/TabBarIcon';
 import Home from './index';
 import Details from './New/Details';
@@ -47,6 +48,7 @@ const Occurrences = createStackNavigator(
     Media: {
       screen: Media,
       navigationOptions: ({navigation}) => ({
+        headerLeft: <HeaderBack navigation={navigation} />,
         headerRight: () => (
           <Advance
             onPress={() => {

@@ -3,8 +3,11 @@ import Toast from 'react-native-root-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import Camera from '../../../../../../components/Camera';
 import MediaList from '../../../../../../components/MediaList';
-import {addPhoto} from '../../../../../../store/actions/photo';
+import {addPhoto, clearOccurrence} from '../../../../../../store/actions/photo';
 import {requestStoragePermission} from '../../../../../../utils/permissions';
+import {AndroidBackHandler} from 'react-navigation-backhandler';
+import {Alert} from 'react-native';
+
 import {
   ActionButton,
   ActionButtonContainer,
@@ -15,8 +18,12 @@ import {
   MediaContainer,
   MediaListContainer,
 } from './styles';
+import RNFS from 'react-native-fs';
+
+const mediaPath = RNFS.ExternalStorageDirectoryPath + '/RioDoCampoLimpo';
 
 export default function Photo({navigation}) {
+  const occurrence = useSelector(state => state.occurrence);
   const photos = useSelector(state => state.occurrence.photos);
   const error = useSelector(state => state.error);
 
@@ -39,12 +46,19 @@ export default function Photo({navigation}) {
   async function handleClick() {
     await requestStoragePermission();
 
-    const {uri} = await camera.takePictureAsync({
-      quality: 0.8,
-      fixOrientation: true,
-      skipProcessing: true,
-      pauseAfterCapture: false,
+    RNFS.exists(mediaPath).then(exists => {
+      if (!exists) {
+        RNFS.mkdir(mediaPath, {});
+      }
     });
+
+    const {uri} = await camera
+      .takePictureAsync({
+        width: 1920,
+        skipProcessing: true,
+        fixOrientation: false,
+      })
+      .catch(error => console.tron.error(error));
 
     dispatch(addPhoto(uri));
 
@@ -59,23 +73,29 @@ export default function Photo({navigation}) {
     }
   }
 
+  function handleBack() {
+    return false;
+  }
+
   return (
-    <Container>
-      <CameraContainer>
-        <Camera navigation={navigation} setCamera={setCamera} />
-      </CameraContainer>
-      <MediaContainer>
-        <MediaListContainer>
-          <MediaList tiles={photos} />
-        </MediaListContainer>
-        <ActionButtonContainer>
-          <ActionButton onPress={handleClick}>
-            <ActionButtonInner>
-              <CameraIcon />
-            </ActionButtonInner>
-          </ActionButton>
-        </ActionButtonContainer>
-      </MediaContainer>
-    </Container>
+    <AndroidBackHandler onBackPress={handleBack}>
+      <Container>
+        <CameraContainer>
+          <Camera navigation={navigation} setCamera={setCamera} />
+        </CameraContainer>
+        <MediaContainer>
+          <MediaListContainer>
+            <MediaList tiles={photos} />
+          </MediaListContainer>
+          <ActionButtonContainer>
+            <ActionButton onPress={handleClick}>
+              <ActionButtonInner>
+                <CameraIcon />
+              </ActionButtonInner>
+            </ActionButton>
+          </ActionButtonContainer>
+        </MediaContainer>
+      </Container>
+    </AndroidBackHandler>
   );
 }

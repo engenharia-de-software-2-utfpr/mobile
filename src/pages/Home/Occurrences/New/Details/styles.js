@@ -1,6 +1,7 @@
-import styled from 'styled-components/native';
-import {TextInput, FlatList} from 'react-native';
+import {TextInput, Text} from 'react-native';
 import {Chip} from 'react-native-paper';
+import styled from 'styled-components/native';
+import {FAB} from 'react-native-paper';
 
 export const Container = styled.View`
   flex: 1;
@@ -38,7 +39,7 @@ export const CategoryContainer = styled.View`
   flex-wrap: wrap;
 `;
 
-export const CategoryChip = styled(Chip)`
+export const CategoryChip = styled(Chip).attrs({})`
   margin: 4px;
 `;
 
@@ -47,4 +48,15 @@ export const CriticityLevelTitle = styled.Text`
   font-size: 14px;
   text-align: center;
   padding: 8%;
+`;
+
+export const Error = styled.Text`
+  text-align: center;
+`;
+
+export const Fab = styled(FAB).attrs({icon: 'check'})`
+  position: absolute;
+  margin: 16px;
+  right: 0;
+  bottom: 0;
 `;

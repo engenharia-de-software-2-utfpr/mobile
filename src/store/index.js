@@ -4,6 +4,8 @@ import Reactotron from '../config/ReactotronConfig';
 const INITIAL_STATE = {
   occurrence: {
     photos: [],
+    videos: [],
+    audios: [],
   },
   error: null,
 };
@@ -31,6 +33,17 @@ function reducer(state = INITIAL_STATE, action) {
         occurrence: {
           ...state.occurrence,
           photos,
+        },
+        error: null,
+      };
+
+    case 'CLEAR_OCCURRENCE':
+      return {
+        ...state,
+        occurrence: {
+          photos: [],
+          videos: [],
+          audios: [],
         },
         error: null,
       };
