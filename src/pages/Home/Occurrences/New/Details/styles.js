@@ -37,6 +37,7 @@ export const CategoryContainer = styled.View`
   max-height: 10%;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-bottom: 4%;
 `;
 
 export const CategoryChip = styled(Chip).attrs({})`
@@ -47,7 +48,18 @@ export const CriticityLevelTitle = styled.Text`
   font-weight: bold;
   font-size: 14px;
   text-align: center;
-  padding: 8%;
+  padding-top: 12%;
+  padding-bottom: 4%;
+`;
+
+export const CriticityLevelContainer = styled.View`
+  align-items: center;
+`;
+
+export const CriticityLevelLabelContainer = styled.View`
+  width: 200;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Error = styled.Text`
