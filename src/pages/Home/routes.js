@@ -5,14 +5,14 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import Occurrences from './Occurrences/routes';
 import Events from './Events/routes';
 import Informations from './Informations/routes';
-import Surveys from './Surveys/routes';
+import Settings from './Settings/routes';
 
 export default createBottomTabNavigator(
   {
     Occurrences,
     Events,
     Informations,
-    Surveys,
+    Settings,
   },
   {
     tabBarOptions: {

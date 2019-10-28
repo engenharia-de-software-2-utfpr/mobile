@@ -1,22 +1,12 @@
+import auth from '@react-native-firebase/auth';
 import React, {useEffect} from 'react';
 import {Image, Text, View} from 'react-native';
-import {
-  ButtonContainer,
-  Gradient,
-  Title,
-  Phone,
-  Container,
-  Facebook,
-} from './styles';
+import {AccessToken, LoginManager} from 'react-native-fbsdk';
+import Sensitive from 'react-native-sensitive-info';
 import {material} from 'react-native-typography';
 import {useNavigation} from 'react-navigation-hooks';
-
-import {LoginManager, AccessToken} from 'react-native-fbsdk';
-import auth from '@react-native-firebase/auth';
-
-import Sensitive from 'react-native-sensitive-info';
-
 import api from '../../../services/api';
+import {ButtonContainer, Container, Facebook, Gradient, Phone} from './styles';
 
 export default function Login() {
   const navigation = useNavigation();

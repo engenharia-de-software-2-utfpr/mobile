@@ -14,7 +14,6 @@ export default function Occurrence({navigation}) {
 
     Geolocation.getCurrentPosition(
       position => {
-        console.log('hahahah', position);
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
       },
