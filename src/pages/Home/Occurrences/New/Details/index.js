@@ -4,6 +4,7 @@ import {Text} from 'react-native';
 import {Code} from 'react-content-loader/native';
 import Toast from 'react-native-root-toast';
 import AsyncStorage from '@react-native-community/async-storage';
+import {useSelector, useDispatch} from 'react-redux';
 import Slider from '@react-native-community/slider';
 import {Avatar} from 'react-native-paper';
 import icons from '../../../../../assets/icons';
@@ -21,14 +22,18 @@ import {
   CriticityLevelContainer,
   CriticityLevelLabelContainer,
 } from './styles';
+import {updateOccurrence} from '../../../../../store/actions/occurrence';
 
 export default function Details() {
-  const [description, setDescription] = useState('');
+  // const [description, setDescription] = useState('');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [criticityLevel, setCriticityLevel] = useState(3);
+  // const [selectedCategory, setSelectedCategory] = useState(null);
+  // const [criticityLevel, setCriticityLevel] = useState(3);
+
+  const occurrence = useSelector(state => state.occurrence);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadCategories() {
@@ -50,7 +55,6 @@ export default function Details() {
       } else {
         try {
           const data = await AsyncStorage.getItem('@categories');
-          console.tron.log(data);
           setCategories(JSON.parse(data));
         } catch (err) {
           setError(
@@ -66,7 +70,7 @@ export default function Details() {
   }, []);
 
   async function createOccurrence() {
-    if (selectedCategory === null) {
+    if (occurrence.category === null) {
       Toast.show('Escolha uma categoria', {
         duration: Toast.durations.SHORT,
         position: Toast.positions.BOTTOM,
@@ -86,7 +90,10 @@ export default function Details() {
   return (
     <Container>
       <DetailsTitle>Aqui você pode descrever a ocorrência</DetailsTitle>
-      <DetailsInput value={description} onChangeText={setDescription} />
+      <DetailsInput
+        value={occurrence.description}
+        onChangeText={description => dispatch(updateOccurrence({description}))}
+      />
       <CategoryTitle>
         Em qual categoria sua ocorrência se encaixa?
       </CategoryTitle>
@@ -99,10 +106,10 @@ export default function Details() {
         ) : (
           categories.map(category => (
             <CategoryChip
-              selected={category.id === selectedCategory}
+              selected={category.id === occurrence.category}
               key={category.id}
               onPress={() => {
-                setSelectedCategory(category.id);
+                dispatch(updateOccurrence({category: category.id}));
               }}
               selectedColor="transparent"
               avatar={
@@ -131,8 +138,10 @@ export default function Details() {
           minimumValue={1}
           maximumValue={5}
           step={1}
-          value={criticityLevel}
-          onValueChange={setCriticityLevel}
+          value={occurrence.criticityLevel}
+          onValueChange={criticityLevel =>
+            dispatch(updateOccurrence({criticityLevel}))
+          }
           maximumTrackTintColor="#d3d3d3"
           minimumTrackTintColor="rgb(252, 228, 149)"
         />
