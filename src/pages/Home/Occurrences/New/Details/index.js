@@ -1,36 +1,39 @@
-import NetInfo from '@react-native-community/netinfo';
-import React, {useEffect, useState} from 'react';
-import {Text} from 'react-native';
-import {Code} from 'react-content-loader/native';
-import Toast from 'react-native-root-toast';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useSelector, useDispatch} from 'react-redux';
+import NetInfo from '@react-native-community/netinfo';
 import Slider from '@react-native-community/slider';
+import React, {useEffect, useState} from 'react';
+import {Code} from 'react-content-loader/native';
+import {Text} from 'react-native';
 import {Avatar} from 'react-native-paper';
+import Toast from 'react-native-root-toast';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigation} from 'react-navigation-hooks';
 import icons from '../../../../../assets/icons';
 import api from '../../../../../services/api';
+import {
+  createOccurrence,
+  updateOccurrence,
+} from '../../../../../store/actions/occurrence';
 import {
   CategoryChip,
   CategoryContainer,
   CategoryTitle,
   Container,
+  CriticityLevelContainer,
+  CriticityLevelLabelContainer,
+  CriticityLevelTitle,
   DetailsInput,
   DetailsTitle,
   Error,
   Fab,
-  CriticityLevelTitle,
-  CriticityLevelContainer,
-  CriticityLevelLabelContainer,
 } from './styles';
-import {updateOccurrence} from '../../../../../store/actions/occurrence';
 
 export default function Details() {
-  // const [description, setDescription] = useState('');
+  const navigation = useNavigation();
+
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // const [selectedCategory, setSelectedCategory] = useState(null);
-  // const [criticityLevel, setCriticityLevel] = useState(3);
 
   const occurrence = useSelector(state => state.occurrence);
   const dispatch = useDispatch();
@@ -69,7 +72,7 @@ export default function Details() {
     loadCategories();
   }, []);
 
-  async function createOccurrence() {
+  async function handleFab() {
     if (occurrence.category === null) {
       Toast.show('Escolha uma categoria', {
         duration: Toast.durations.SHORT,
@@ -78,13 +81,10 @@ export default function Details() {
         animation: true,
         hideOnPress: true,
       });
+    } else {
+      dispatch(createOccurrence());
+      navigation.navigate('Upload');
     }
-
-    const cachedOccurrences = JSON.parse(
-      await AsyncStorage.getItem('@occurrences'),
-    );
-
-    console.tron.log(cachedOccurrences);
   }
 
   return (
@@ -151,7 +151,7 @@ export default function Details() {
         </CriticityLevelLabelContainer>
       </CriticityLevelContainer>
 
-      <Fab onPress={createOccurrence} />
+      <Fab onPress={handleFab} />
     </Container>
   );
 }

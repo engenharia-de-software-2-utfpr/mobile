@@ -10,6 +10,7 @@ const INITIAL_STATE = {
     videos: [],
     audios: [],
   },
+  uploading: false,
   error: null,
 };
 
@@ -58,6 +59,12 @@ function reducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         occurrence: {...state.occurrence, ...action.payload.data},
+      };
+
+    case 'CREATE_OCCURRENCE_STARTED':
+      return {
+        ...state,
+        uploading: true,
       };
 
     default:

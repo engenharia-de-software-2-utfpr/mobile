@@ -10,6 +10,7 @@ import Details from './New/Details';
 import Audio from './New/Media/Audio';
 import Photo from './New/Media/Photo';
 import Video from './New/Media/Video';
+import Upload from './New/Upload';
 import {Advance} from './styles';
 
 const Media = createBottomTabNavigator({
@@ -64,6 +65,10 @@ const Occurrences = createStackNavigator(
       navigationOptions: {
         title: 'Detalhes',
       },
+    },
+    Upload: {
+      screen: Upload,
+      navigationOptions: {header: null},
     },
   },
   {transitionConfig: () => fromRight()},

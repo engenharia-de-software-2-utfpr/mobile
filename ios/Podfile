@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'mobile2' do
-  # Pods for mobile2
+target 'riodocampolimpo' do
+  # Pods for riodocampolimpo
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,7 +34,7 @@ target 'mobile2' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'mobile2Tests' do
+  target 'riodocampolimpoTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -42,10 +42,10 @@ target 'mobile2' do
   use_native_modules!
 end
 
-target 'mobile2-tvOS' do
-  # Pods for mobile2-tvOS
+target 'riodocampolimpo-tvOS' do
+  # Pods for riodocampolimpo-tvOS
 
-  target 'mobile2-tvOSTests' do
+  target 'riodocampolimpo-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

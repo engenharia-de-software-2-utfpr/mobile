@@ -10,7 +10,7 @@ export default createAppContainer(
       Auth,
     },
     {
-      initialRouteName: 'Home',
+      initialRouteName: 'Auth',
     },
   ),
 );

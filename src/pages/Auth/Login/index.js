@@ -1,19 +1,87 @@
-import React from 'react';
-import {View, Text, Image} from 'react-native';
+import React, {useEffect} from 'react';
+import {Image, Text, View} from 'react-native';
+import {
+  ButtonContainer,
+  Gradient,
+  Title,
+  Phone,
+  Container,
+  Facebook,
+} from './styles';
+import {material} from 'react-native-typography';
+import {useNavigation} from 'react-navigation-hooks';
 
-import {Container} from './styles';
-import {SafeAreaView} from 'react-navigation';
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
+import auth from '@react-native-firebase/auth';
 
-import LinearGradient from 'react-native-linear-gradient';
+import Sensitive from 'react-native-sensitive-info';
+
+import api from '../../../services/api';
 
 export default function Login() {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    async function checkIfIsAuthenticated() {
+      const token = await Sensitive.getItem('token', {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      });
+
+      if (token) {
+        navigation.navigate('Home');
+      }
+    }
+    checkIfIsAuthenticated();
+  }, [navigation]);
+
+  async function handleFacebookSignIn() {
+    await LoginManager.logInWithPermissions(['public_profile']);
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (data) {
+      const credential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+      const firebaseUserCredential = await auth().signInWithCredential(
+        credential,
+      );
+      const token = await firebaseUserCredential.user.getIdToken();
+
+      Sensitive.setItem('token', token, {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      });
+
+      try {
+        api.post('user/signup', {token});
+        navigation.navigate('Home');
+      } catch (error) {
+        console.tron.error(error);
+      }
+    }
+  }
+
   return (
     <Container>
-      <LinearGradient
-        colors={['#F4F4FA', '#EDF0F8']}
-        style={{flex: 1, alignItems: 'center'}}>
-        <Image source={require('../../../assets/logo.png')} />
-      </LinearGradient>
+      <Gradient>
+        <View style={{flex: 0.7, alignItems: 'center'}}>
+          <Image
+            source={require('../../../assets/logo.png')}
+            style={{marginBottom: 16}}
+          />
+          <Text style={{...material.subheading, textAlign: 'center'}}>
+            Contribua para termos uma cidade mais limpa e agradável
+          </Text>
+        </View>
+        <View style={{flex: 0.3, justifyContent: 'flex-end'}}>
+          <ButtonContainer>
+            <Facebook onPress={handleFacebookSignIn}>
+              Entrar com o Facebook
+            </Facebook>
+            <Phone onPress={() => {}}>Entrar com o celular</Phone>
+          </ButtonContainer>
+        </View>
+      </Gradient>
     </Container>
   );
 }
