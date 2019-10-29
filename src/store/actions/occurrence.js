@@ -77,6 +77,8 @@ export function createOccurrence() {
           });
 
           // atualizar created = true
+          // salvar urls para caso a internet caia no meio do processo de upload
+
           await Promise.all(photoUploadPromises);
 
           // atualizar uploaded = true
