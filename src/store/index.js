@@ -3,10 +3,14 @@ import thunk from 'redux-thunk';
 import Reactotron from '../config/ReactotronConfig';
 const INITIAL_STATE = {
   occurrence: {
+    description: '',
+    category: null,
+    criticityLevel: 3,
     photos: [],
     videos: [],
     audios: [],
   },
+  uploading: false,
   error: null,
 };
 
@@ -41,11 +45,38 @@ function reducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         occurrence: {
+          description: '',
+          category: null,
+          criticityLevel: 3,
           photos: [],
           videos: [],
           audios: [],
         },
         error: null,
+      };
+
+    case 'UPDATE_OCCURRENCE':
+      return {
+        ...state,
+        occurrence: {...state.occurrence, ...action.payload.data},
+      };
+
+    case 'CREATE_OCCURRENCE_STARTED':
+      return {
+        ...state,
+        uploading: true,
+      };
+
+    case 'CREATE_OCCURRENCE_SUCCESS':
+      return {
+        ...state,
+        uploading: false,
+      };
+
+    case 'CREATE_OCCURRENCE_FAILED':
+      return {
+        ...state,
+        uploading: false,
       };
 
     default:

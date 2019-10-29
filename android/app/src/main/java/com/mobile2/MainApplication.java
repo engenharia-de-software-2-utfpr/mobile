@@ -1,4 +1,4 @@
-package com.mobile2;
+package com.riodocampolimpo;
 
 import android.app.Application;
 import android.content.Context;

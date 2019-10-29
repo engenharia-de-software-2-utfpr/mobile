@@ -1,4 +1,4 @@
-package com.mobile2;
+package com.riodocampolimpo;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "mobile2";
+    return "riodocampolimpo";
   }
 }

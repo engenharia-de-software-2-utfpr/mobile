@@ -131,12 +131,13 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mobile2"
+        applicationId "com.riodocampolimpo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
+        multiDexEnabled true
 
         manifestPlaceholders = [googleMapsKey: localProperties['googleMapsKey']]
 
@@ -216,3 +217,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'
