@@ -37,13 +37,13 @@ export default function Login() {
       );
       const token = await firebaseUserCredential.user.getIdToken();
 
-      Sensitive.setItem('token', token, {
-        sharedPreferencesName: 'mySharedPrefs',
-        keychainService: 'myKeychain',
-      });
-
       try {
-        api.post('user/signup', {token});
+        const response = await api.post('user/signup', {token});
+
+        Sensitive.setItem('token', response.data.data.token, {
+          sharedPreferencesName: 'mySharedPrefs',
+          keychainService: 'myKeychain',
+        });
         navigation.navigate('Home');
       } catch (error) {
         console.tron.error(error);

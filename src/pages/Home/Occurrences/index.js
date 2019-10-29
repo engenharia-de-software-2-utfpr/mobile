@@ -1,16 +1,35 @@
 import React, {useEffect, useState} from 'react';
 import {Button, ButtonContainer, ButtonText, Container, Map} from './styles';
-import {View} from 'react-native';
+import {View, Image} from 'react-native';
 import {requestGeoPermission} from '../../../utils/permissions';
 import Geolocation from '@react-native-community/geolocation';
-import {Circle} from 'react-native-maps';
+import {Circle, Marker} from 'react-native-maps';
+import Sensitive from 'react-native-sensitive-info';
+import icons from '../../../assets/icons';
+
+import api from '../../../services/api';
 
 export default function Occurrence({navigation}) {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [occurrences, setOccurrences] = useState([]);
 
   useEffect(() => {
-    requestGeoPermission();
+    async function getNearOccurrences() {
+      const token = await Sensitive.getItem('token', {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      });
+
+      api
+        .get('occurrence/near', {
+          params: {latitude, longitude},
+          headers: {Authorization: 'Bearer ' + token},
+        })
+        .then(result => {
+          setOccurrences(result.data.data);
+        });
+    }
 
     Geolocation.getCurrentPosition(
       position => {
@@ -20,6 +39,10 @@ export default function Occurrence({navigation}) {
       null,
       {enableHighAccuracy: true},
     );
+
+    requestGeoPermission();
+    getNearOccurrences();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -110,6 +133,23 @@ export default function Occurrence({navigation}) {
           fillColor={'#4db6ac'}
           strokeColor={'#4db6ac'}
         />
+
+        {occurrences.map(occurrence => {
+          return (
+            <Marker
+              title={'ola'}
+              key={occurrence.id}
+              coordinate={{
+                latitude: parseFloat(occurrence.latitude, 10),
+                longitude: parseFloat(occurrence.longitude, 10),
+              }}>
+              <Image
+                source={icons[occurrence.category_id]}
+                style={{width: 20, height: 20}}
+              />
+            </Marker>
+          );
+        })}
       </Map>
 
       <ButtonContainer>
