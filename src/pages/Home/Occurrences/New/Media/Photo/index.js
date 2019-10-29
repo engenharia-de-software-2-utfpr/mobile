@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
+import RNFS from 'react-native-fs';
 import Toast from 'react-native-root-toast';
+import {AndroidBackHandler} from 'react-navigation-backhandler';
 import {useDispatch, useSelector} from 'react-redux';
 import Camera from '../../../../../../components/Camera';
 import MediaList from '../../../../../../components/MediaList';
-import {addPhoto, clearOccurrence} from '../../../../../../store/actions/photo';
+import {addPhoto} from '../../../../../../store/actions/photo';
 import {requestStoragePermission} from '../../../../../../utils/permissions';
-import {AndroidBackHandler} from 'react-navigation-backhandler';
-import {Alert} from 'react-native';
-
 import {
   ActionButton,
   ActionButtonContainer,
@@ -18,7 +17,6 @@ import {
   MediaContainer,
   MediaListContainer,
 } from './styles';
-import RNFS from 'react-native-fs';
 
 const mediaPath = RNFS.ExternalStorageDirectoryPath + '/RioDoCampoLimpo';
 

@@ -43,9 +43,3 @@ export function removePhoto(photo) {
     payload: {photo},
   };
 }
-
-export function clearOccurrence() {
-  return {
-    type: 'CLEAR_OCCURRENCE',
-  };
-}

@@ -2,7 +2,7 @@ import React from 'react';
 import {Alert} from 'react-native';
 import {HeaderBackButton} from 'react-navigation-stack';
 import {useSelector, useDispatch} from 'react-redux';
-import {clearOccurrence} from '../../store/actions/photo';
+import {clearOccurrence} from '../../store/actions/occurrence';
 
 // import { Container } from './styles';
 

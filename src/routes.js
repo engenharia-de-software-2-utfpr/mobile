@@ -1,7 +1,6 @@
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-
-import AuthLoading from './pages/AuthLoading';;
 import Auth from './pages/Auth/routes';
+import AuthLoading from './pages/AuthLoading';
 import Home from './pages/Home/routes';
 
 export default createAppContainer(
