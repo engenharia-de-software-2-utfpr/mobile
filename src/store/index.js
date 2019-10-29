@@ -67,6 +67,18 @@ function reducer(state = INITIAL_STATE, action) {
         uploading: true,
       };
 
+    case 'CREATE_OCCURRENCE_SUCCESS':
+      return {
+        ...state,
+        uploading: false,
+      };
+
+    case 'CREATE_OCCURRENCE_FAILED':
+      return {
+        ...state,
+        uploading: false,
+      };
+
     default:
       return state;
   }

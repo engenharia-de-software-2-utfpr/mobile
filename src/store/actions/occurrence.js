@@ -2,6 +2,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import Axios from 'axios';
 import api from '../../services/api';
+import Geolocation from '@react-native-community/geolocation';
+import Sensitive from 'react-native-sensitive-info';
+import RNFS from 'react-native-fs';
+import {Platform} from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export function updateOccurrence(data) {
   return {
@@ -10,12 +15,20 @@ export function updateOccurrence(data) {
   };
 }
 
+const mediaPath =
+  'file://' + RNFS.ExternalStorageDirectoryPath + '/RioDoCampoLimpo';
+
 export function createOccurrence() {
   return async (dispatch, getState) => {
     dispatch(createOccurrenceStarted());
 
     try {
       const {occurrence} = getState();
+
+      const token = await Sensitive.getItem('token', {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      });
 
       // Salva localmente independente da conexão
       let occurrences = JSON.parse(await AsyncStorage.getItem('@occurrences'));
@@ -30,22 +43,49 @@ export function createOccurrence() {
       const {isConnected} = await NetInfo.fetch();
 
       if (isConnected) {
-        const {data} = await api.post('occurrence', {
-          coordinates: {latitude: '-48.0389848', longitude: '-52.3754754'},
-          num_photos: occurrence.photos.length,
-          num_videos: occurrence.videos.length,
-          num_audios: occurrence.audios.length,
-          category_id: occurrence.category,
-          description: occurrence.description,
-          criticity_level: occurrence.criticityLevel,
-        });
+        Geolocation.getCurrentPosition(async position => {
+          const {data} = await api.post(
+            'occurrence',
+            {
+              coordinates: {
+                latitude: position.coords.latitude.toString(),
+                longitude: position.coords.longitude.toString(),
+              },
+              num_photos: occurrence.photos.length,
+              num_videos: occurrence.videos.length,
+              num_audios: occurrence.audios.length,
+              category_id: occurrence.category,
+              description: occurrence.description,
+              criticity_level: occurrence.criticityLevel,
+            },
+            {
+              headers: {Authorization: 'Bearer ' + token},
+            },
+          );
 
-        console.tron.log(data);
-      } else {
-        //
+          const photoUploadPromises = occurrence.photos.map((name, index) => {
+            const fileUri = (mediaPath + '/' + name).replace('file://', '');
+
+            const headers = {};
+
+            return RNFetchBlob.fetch(
+              'PUT',
+              data.data.photos[index],
+              headers,
+              RNFetchBlob.wrap(fileUri),
+            );
+          });
+
+          // atualizar created = true
+          await Promise.all(photoUploadPromises);
+
+          // atualizar uploaded = true
+
+          dispatch(createOccurrenceSuccess());
+        });
       }
     } catch (error) {
-      console.tron.error(error);
+      dispatch(createOccurrenceFailure());
     }
   };
 }
