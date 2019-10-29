@@ -37,7 +37,7 @@ export default function Occurrence({navigation}) {
         setLongitude(position.coords.longitude);
       },
       null,
-      {enableHighAccuracy: true},
+      // {enableHighAccuracy: true},
     );
 
     requestGeoPermission();
@@ -137,7 +137,6 @@ export default function Occurrence({navigation}) {
         {occurrences.map(occurrence => {
           return (
             <Marker
-              title={'ola'}
               key={occurrence.id}
               coordinate={{
                 latitude: parseFloat(occurrence.latitude, 10),

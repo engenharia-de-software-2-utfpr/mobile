@@ -29,7 +29,3 @@ export const ButtonText = styled.Text`
   color: white;
   font-weight: bold;
 `;
-
-export const Advance = styled.TouchableOpacity`
-  margin-right: 15px;
-`;

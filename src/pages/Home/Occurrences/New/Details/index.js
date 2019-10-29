@@ -81,6 +81,14 @@ export default function Details() {
         animation: true,
         hideOnPress: true,
       });
+    } else if (!occurrence.description.length) {
+      Toast.show('Descrição vazia', {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
     } else {
       dispatch(createOccurrence());
       navigation.navigate('Upload');
