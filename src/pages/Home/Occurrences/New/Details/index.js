@@ -27,6 +27,7 @@ import {
   Error,
   Fab,
 } from './styles';
+import Geolocation from '@react-native-community/geolocation';
 
 export default function Details() {
   const navigation = useNavigation();

@@ -3,6 +3,8 @@ import thunk from 'redux-thunk';
 import Reactotron from '../config/ReactotronConfig';
 const INITIAL_STATE = {
   occurrence: {
+    latitude: 0,
+    longitude: 0,
     description: '',
     category: null,
     criticityLevel: 3,
@@ -16,6 +18,16 @@ const INITIAL_STATE = {
 
 function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case 'UPDATE_POSITION':
+      return {
+        ...state,
+        occurrence: {
+          ...state.occurrence,
+          latitude: action.payload.latitude,
+          longitude: action.payload.longitude,
+        },
+      };
+
     case 'ADD_PHOTO_SUCCESS':
       return {
         ...state,
@@ -45,6 +57,7 @@ function reducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         occurrence: {
+          ...state.occurrence,
           description: '',
           category: null,
           criticityLevel: 3,
