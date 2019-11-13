@@ -53,6 +53,31 @@ function reducer(state = INITIAL_STATE, action) {
         error: null,
       };
 
+    case 'ADD_VIDEO_SUCCESS':
+      return {
+        ...state,
+        occurrence: {
+          ...state.occurrence,
+          videos: [...state.occurrence.videos, action.payload.video],
+        },
+      };
+    case 'ADD_VIDEO_FAILURE':
+      return {...state, error: action.payload.error};
+
+    case 'REMOVE_VIDEO':
+      const videos = state.occurrence.videos.filter(
+        video => video !== action.payload.video,
+      );
+
+      return {
+        ...state,
+        occurrence: {
+          ...state.occurrence,
+          videos,
+        },
+        error: null,
+      };
+
     case 'CLEAR_OCCURRENCE':
       return {
         ...state,

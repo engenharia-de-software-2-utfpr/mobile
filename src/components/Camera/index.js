@@ -23,7 +23,7 @@ export default function MediaHolder({navigation, setCamera}) {
           ref={cam => {
             setCamera(cam);
           }}
-          captureAudio={false}
+          captureAudio={true}
           type={RNCamera.Constants.Type.back}
           autoFocus={RNCamera.Constants.AutoFocus.on}
           flashMode={RNCamera.Constants.FlashMode.off}

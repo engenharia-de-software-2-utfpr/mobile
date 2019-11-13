@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import RNFS from 'react-native-fs';
 import Sensitive from 'react-native-sensitive-info';
+import RNFetchBlob from 'rn-fetch-blob';
 import api from '../../services/api';
 
 export function updateOccurrence(data) {
@@ -74,6 +75,10 @@ export function createOccurrence() {
     try {
       const {occurrence} = getState();
 
+      if (!occurrence.photos.length && !occurrence.videos.length) {
+        throw 'Você deve enviar pelo menos uma foto ou um video';
+      }
+
       const token = await Sensitive.getItem('token', {
         sharedPreferencesName: 'mySharedPrefs',
         keychainService: 'myKeychain',
@@ -106,15 +111,30 @@ export function createOccurrence() {
 
           const headers = {};
 
-          // return RNFetchBlob.fetch(
-          //   'PUT',
-          //   data.data.photos[index],
-          //   headers,
-          //   RNFetchBlob.wrap(fileUri),
-          // );
+          return RNFetchBlob.fetch(
+            'PUT',
+            data.data.photos[index],
+            headers,
+            RNFetchBlob.wrap(fileUri),
+          );
         });
 
         await Promise.all(photoUploadPromises);
+
+        const videoUploadPromises = occurrence.videos.map((name, index) => {
+          const fileUri = (mediaPath + '/' + name).replace('file://', '');
+
+          const headers = {};
+
+          return RNFetchBlob.fetch(
+            'PUT',
+            data.data.videos[index],
+            headers,
+            RNFetchBlob.wrap(fileUri),
+          );
+        });
+
+        await Promise.all(videoUploadPromises);
 
         dispatch(createOccurrenceSuccess());
         dispatch(clearOccurrence());
@@ -135,7 +155,7 @@ export function createOccurrence() {
         AsyncStorage.setItem('@occurrences', JSON.stringify(occurrences));
       }
     } catch (error) {
-      dispatch(createOccurrenceFailure());
+      dispatch(createOccurrenceFailure(error));
     }
   };
 }
