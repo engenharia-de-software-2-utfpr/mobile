@@ -1,15 +1,23 @@
 import React from 'react';
-import {Alert} from 'react-native';
+import PropTypes from 'prop-types';
+import {Alert, Text} from 'react-native';
 import RNFS from 'react-native-fs';
 import {useDispatch} from 'react-redux';
 import {removePhoto} from '../../store/actions/photo';
 import {removeVideo} from '../../store/actions/video';
-import {Container, MediaTile, MediaTileContainer} from './styles';
+import {
+  Container,
+  MediaTile,
+  MediaTileContainer,
+  AudioMediaTileContainer,
+  AudioMediaIcon,
+} from './styles';
+import {removeAudio} from '../../store/actions/audio';
 
 const mediaPath =
   'file://' + RNFS.ExternalStorageDirectoryPath + '/RioDoCampoLimpo';
 
-export default function MediaList({tiles, isVideo}) {
+function MediaList({tiles, type}) {
   const dispatch = useDispatch();
 
   return (
@@ -23,18 +31,32 @@ export default function MediaList({tiles, isVideo}) {
               {
                 text: 'Sim',
                 onPress: () => {
-                  if (isVideo) {
-                    dispatch(removeVideo(tile));
-                  } else {
+                  if (type === 'photo') {
                     dispatch(removePhoto(tile));
+                  } else if (type === 'video') {
+                    dispatch(removeVideo(tile));
+                  } else if (type === 'audio') {
+                    dispatch(removeAudio(tile));
                   }
                 },
               },
             ]);
           }}>
-          <MediaTile source={{uri: mediaPath + '/' + tile}} />
+          {type === 'audio' ? (
+            <AudioMediaTileContainer>
+              <AudioMediaIcon />
+            </AudioMediaTileContainer>
+          ) : (
+            <MediaTile source={{uri: mediaPath + '/' + tile}} />
+          )}
         </MediaTileContainer>
       ))}
     </Container>
   );
 }
+
+MediaList.propTypes = {
+  type: PropTypes.oneOf(['photo', 'video', 'audio']),
+};
+
+export default MediaList;

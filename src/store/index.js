@@ -78,6 +78,31 @@ function reducer(state = INITIAL_STATE, action) {
         error: null,
       };
 
+    case 'ADD_AUDIO_SUCCESS':
+      return {
+        ...state,
+        occurrence: {
+          ...state.occurrence,
+          audios: [...state.occurrence.audios, action.payload.audio],
+        },
+      };
+    case 'ADD_AUDIO_FAILURE':
+      return {...state, error: action.payload.error};
+
+    case 'REMOVE_AUDIO':
+      const audios = state.occurrence.audios.filter(
+        audio => audio !== action.payload.audio,
+      );
+
+      return {
+        ...state,
+        occurrence: {
+          ...state.occurrence,
+          audios,
+        },
+        error: null,
+      };
+
     case 'CLEAR_OCCURRENCE':
       return {
         ...state,

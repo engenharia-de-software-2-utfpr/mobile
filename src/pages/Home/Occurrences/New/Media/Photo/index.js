@@ -83,7 +83,7 @@ export default function Photo({navigation}) {
         </CameraContainer>
         <MediaContainer>
           <MediaListContainer>
-            <MediaList tiles={photos} />
+            <MediaList tiles={photos} type={'photo'} />
           </MediaListContainer>
           <ActionButtonContainer>
             <ActionButton onPress={handleClick}>

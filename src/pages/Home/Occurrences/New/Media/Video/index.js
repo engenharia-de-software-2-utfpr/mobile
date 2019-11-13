@@ -122,7 +122,7 @@ export default function Video({navigation}) {
         </CameraContainer>
         <MediaContainer>
           <MediaListContainer>
-            <MediaList tiles={videos} isVideo={true} />
+            <MediaList tiles={videos} type={'video'} />
           </MediaListContainer>
           <ActionButtonContainer>
             <ActionButton onPress={handleClick}>
