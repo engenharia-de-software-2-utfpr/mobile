@@ -8,7 +8,7 @@ import api from '../../services/api';
 export function updateOccurrence(data) {
   return {
     type: 'UPDATE_OCCURRENCE',
-    payload: {data},
+    payload: { data },
   };
 }
 
@@ -73,7 +73,7 @@ export function createOccurrence() {
     dispatch(createOccurrenceStarted());
 
     try {
-      const {occurrence} = getState();
+      const { occurrence } = getState();
 
       if (!occurrence.photos.length && !occurrence.videos.length) {
         throw 'Você deve enviar pelo menos uma foto ou um video';
@@ -84,10 +84,10 @@ export function createOccurrence() {
         keychainService: 'myKeychain',
       });
 
-      const {isConnected} = await NetInfo.fetch();
+      const { isConnected } = await NetInfo.fetch();
 
       if (isConnected) {
-        const {data} = await api.post(
+        const { data } = await api.post(
           'occurrence',
           {
             coordinates: {
@@ -102,7 +102,7 @@ export function createOccurrence() {
             criticity_level: occurrence.criticityLevel,
           },
           {
-            headers: {Authorization: 'Bearer ' + token},
+            headers: { Authorization: 'Bearer ' + token },
           },
         );
 
@@ -136,6 +136,21 @@ export function createOccurrence() {
 
         await Promise.all(videoUploadPromises);
 
+        const audioUploadPromises = occurrence.audios.map((name, index) => {
+          const fileUri = (mediaPath + '/' + name).replace('file://', '');
+
+          const headers = {};
+
+          return RNFetchBlob.fetch(
+            'PUT',
+            data.data.audios[index],
+            headers,
+            RNFetchBlob.wrap(fileUri),
+          );
+        });
+
+        await Promise.all(audioUploadPromises);
+
         dispatch(createOccurrenceSuccess());
         dispatch(clearOccurrence());
       } else {
@@ -148,7 +163,7 @@ export function createOccurrence() {
           occurrences = [];
         }
 
-        occurrences.push({...occurrence, created: false, uploaded: false});
+        occurrences.push({ ...occurrence, created: false, uploaded: false });
 
         console.tron.log(occurrences);
 
