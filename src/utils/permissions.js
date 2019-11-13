@@ -15,3 +15,10 @@ export async function requestGeoPermission() {
   });
   // return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
 }
+
+export async function requestAudioPermission() {
+  return request(PERMISSIONS.ANDROID.RECORD_AUDIO, {
+    title: 'Permissão necessária',
+    message: 'Precisamos de sua permissão para gravar o vídeo',
+  });
+}

@@ -40,15 +40,15 @@ export default function Occurrence({navigation}) {
   }
 
   useEffect(() => {
-    requestGeoPermission();
+    requestGeoPermission().then(() => {
+      Geolocation.watchPosition(position => {
+        dispatch(updatePosition(position.coords));
+      });
 
-    Geolocation.watchPosition(position => {
-      dispatch(updatePosition(position.coords));
-    });
-
-    Geolocation.getCurrentPosition(position => {
-      dispatch(updatePosition(position.coords));
-      getNearOccurrences(position);
+      Geolocation.getCurrentPosition(position => {
+        dispatch(updatePosition(position.coords));
+        getNearOccurrences(position);
+      });
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
